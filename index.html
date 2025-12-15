@@ -5,5 +5,44 @@
   </head>
   <body>
     <h1>woa pokemon so cool</h1>
+    <script>
+       var screen = 1;
+ 
+ var draw = function(){
+     if(screen === 1){
+     background(200,50,50);
+     fill(255, 255, 255);
+     textFont("Calibri", 9.5);
+     text("definitely not", 0, 20);
+     textFont("Calibri", 40);
+     text("Pokemon Battles!", 55, 40);
+     textFont("Calibri",12);
+     text("Rules:\nYou go first. Pick a move to use, then the opponent will take their turn.\nThis repeats until either you or the computer have 3 pokemon faint.\nThen, the player with more pokemon left wins.",0,50);
+     textFont("Calibri",25);
+     if((mouseY > 135 && mouseY < 185) && (mouseX > 0 && mouseX < 100)){
+     fill(0,255,0);
+     rect(0,135,100,50);
+     fill(255,255,255);
+     text("Play!", 5, 170);
+     }else{
+    rect(0,135,100,50);
+    fill(0, 0, 0);
+    text("Play!",5,170);
+     }
+     }
+     else if(screen === 2){
+         background(255,255,255);
+     }
+ };
+
+
+mousePressed = function(){
+    if(screen === 1){
+        if((mouseY > 135 && mouseY < 185) && (mouseX > 0 && mouseX < 100)){
+            screen = 2;
+        }
+    }
+};
+    </script>
   </body>
 </html>
