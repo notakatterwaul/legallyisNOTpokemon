@@ -1,48 +1,188 @@
 <!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
 <html>
-  <head>
-    <title>i cannot legally call this pokemon but it's basically pokemon</title>
-  </head>
-  <body>
-    <h1>woa pokemon so cool</h1>
-    <script>
-       var screen = 1;
- 
- var draw = function(){
-     if(screen === 1){
-     background(200,50,50);
-     fill(255, 255, 255);
-     textFont("Calibri", 9.5);
-     text("definitely not", 0, 20);
-     textFont("Calibri", 40);
-     text("Pokemon Battles!", 55, 40);
-     textFont("Calibri",12);
-     text("Rules:\nYou go first. Pick a move to use, then the opponent will take their turn.\nThis repeats until either you or the computer have 3 pokemon faint.\nThen, the player with more pokemon left wins.",0,50);
-     textFont("Calibri",25);
-     if((mouseY > 135 && mouseY < 185) && (mouseX > 0 && mouseX < 100)){
-     fill(0,255,0);
-     rect(0,135,100,50);
-     fill(255,255,255);
-     text("Play!", 5, 170);
-     }else{
-    rect(0,135,100,50);
-    fill(0, 0, 0);
-    text("Play!",5,170);
-     }
-     }
-     else if(screen === 2){
-         background(255,255,255);
-     }
- };
+    <head>
+        <title>legally not pokemon</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+            canvas {
+                padding-left: 0;
+                padding-right: 0;
+                margin-left: auto;
+                margin-right: auto;
+                display: block;
+                width: 800px;
+            }            
+            
+            p {
+                text-align:center;
+                font-family:'Calibri';
+                font-size: larger;
+                font-style: oblique;
+                font-weight: bold;
+            }
+            h1{
+                text-align:center;
+                font-family:'Calibri';
+                font-size: xx-large;
+                font-style: oblique;
+                font-weight: bold
+            }
+        </style>
+    </head>
+    <body>
+        
+        <div>
+            
+            
+        </div>
+        
+        <h1>
+            woaaaaahhhh waow pokemon so cool
+        </h1>
+        <p>
+            rules:
+            you will go first
+            pick a move for your pokemon to use, or swap them out for another pokemon.<br>
+            the computer will then take their turn and and either attack or swap out their pokemon<br>
+            this cycle repeats until one player has 3 pokemon faint. then, the other player wins.<br>
+        </p>
+        <canvas id="canvas" width="800" height="800" style= "border:1px white" tabindex="1"></canvas>
 
 
-mousePressed = function(){
-    if(screen === 1){
-        if((mouseY > 135 && mouseY < 185) && (mouseX > 0 && mouseX < 100)){
-            screen = 2;
-        }
-    }
-};
-    </script>
-  </body>
+        <script>
+            //var ctx = document.getElementById('canvas').getContext('2d');
+            //screen
+            var ctx;
+            var WIDTH;
+            var HEIGHT;
+            //scores 
+            var p1Score;
+            var p2Score;
+            
+            var turn;
+            
+            var gameState;
+            gameState = 1;
+            //remember to change this to 0 later please and thank you
+            
+            var playerActPkm;
+            var cpuActPkm;
+            
+            playerActPkm = 1;
+            cpuActPkm = 1;
+            
+            var meows = new Image();
+            meows.src = "schoolwork ;bang;/player/meowscarada.gif";
+            
+            
+            
+            function init() {
+                ctx = document.getElementById('canvas').getContext('2d');
+                //attempt full screen
+                //ctx.canvas.width  = window.innerWidth;
+                //ctx.canvas.height = window.innerHeight;
+                WIDTH = ctx.canvas.width;
+                HEIGHT = ctx.canvas.height;
+                p1Score = 0;
+                p2Score = 0;
+                requestAnimationFrame(draw);
+                //return setInterval(draw, 10);
+            }
+
+            function circle(x, y, r) {
+                ctx.beginPath();
+                ctx.arc(x, y, r, 0, Math.PI * 2, true);
+                ctx.closePath();
+                ctx.fill();
+            }
+
+            function rect(x, y, w, h) {
+                ctx.beginPath();
+                ctx.rect(x, y, w, h);
+                ctx.closePath();
+                ctx.fill();
+            }
+
+            function clear() {
+                ctx.fillStyle = "#FFFFFF"; //white
+                rect(0, 0, WIDTH, HEIGHT);
+            }
+
+            function drawScore() {
+                ctx.fillStyle = "#000000"; //black
+                ctx.font = "30px Courier";
+                ctx.fillText("Score: YOU = " + p1Score + " CPU = " + p2Score, WIDTH / 2 - 180, 30);
+            }
+
+            function drawReset() {
+                ctx.fillStyle = "#000000"; //black
+                //draw text
+                ctx.font = "30px Courier";
+                ctx.fillText("Press space", WIDTH / 2 - 90, HEIGHT / 2 - 40);
+            }
+
+
+            function checkScore() {
+                //check if the ball hit the left wall
+                //player 2 scored
+                if (x + dx - rad < 0) {
+                    scoredLast = "p2";
+                    p2Score++;
+                    scored();
+                }
+                //check if the ball hit the right wall
+                //player 1 scored
+                if (x + dx + rad > WIDTH) {
+                    scoredLast = "p1";
+                    p1Score++;
+                    scored();
+                }
+            }
+            
+            function userInput() {
+                
+            }
+            
+            function drawGame() {
+                var playerCurrent;
+                var cpuCurrent;
+                var pXSize;
+                var pYSize;
+                if(playerActPkm === 1){
+                    playerCurrent = meows;
+                    pXSize = 143;
+                    pYSize = 318;
+                }
+                
+                ctx.drawImage(playerCurrent,400,400,pXSize,pYSize);
+            }
+
+            //main game loop
+            function draw() {
+                //start fresh
+                clear();
+                if(gameState === 1){
+                    drawGame();
+                }
+                drawScore();
+                requestAnimationFrame(draw);
+            }
+            //force the title
+            document.title = "legally not pokemon"; 
+            //give the canvas focus
+            document.getElementById('canvas').focus();
+            //call the init function when the page loads
+            window.addEventListener("load", init, false);
+            //call the key press functions when keys are pressed
+            window.addEventListener("click", userInput, false);
+        </script>
+
+    </body>
+
 </html>
